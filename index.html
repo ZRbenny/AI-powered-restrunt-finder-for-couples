@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Restaurant Tinder — Geo + Radius</title>
+  <link rel="stylesheet" href="styles1.css" />
+</head>
+<body>
+  <div class="wrap">
+    <div class="app">
+      <div class="card">
+        <h1>Restaurant Tinder</h1>
+        <p class="muted">Location + radius filtering, distances, and real nearby fetch (OpenStreetMap).</p>
+
+        <!-- SETUP -- add error msg is user put number outside defined range -->
+        <section id="setup">
+          <div class="row">
+            <label>Number of suggestions (5–50)
+              <input id="count" type="number" min="5" max="50" step="1" value="10" />
+            </label>
+            <label>Radius (miles)
+              <input id="radius" type="number" min="1" max="50" step="1" value="10" />
+            </label>
+          </div>
+
+          <div class="row">
+            <label>Your latitude
+              <input id="lat" type="number" step="0.0001" placeholder="e.g., 41.5236" />
+            </label>
+            <label>Your longitude
+              <input id="lng" type="number" step="0.0001" placeholder="-90.5776" />
+            </label>
+          </div>
+
+          <div class="stack" style="margin:6px 0 10px">
+            <button class="btn ghost" id="useLocation">Use my location</button>
+            <button class="btn primary" id="fetchNearby">Fetch nearby restaurants</button>
+            <span class="muted" id="geoStatus"></span>
+          </div>
+
+          <details style="margin-top:10px">
+            <summary class="pill">Edit list (supports coordinates)</summary>
+            <p class="muted" style="margin:10px 0">
+              One per line. Format: <code>Name — Note — lat,lng</code>.<br/>
+              Lines without coordinates are allowed but won’t be distance-filtered.
+            </p>
+<pre id="listEditor" contenteditable style="white-space:pre-wrap; background:#0f0f12; border:1px solid #2a2a31; padding:12px; border-radius:12px; min-height:160px">
+Tatsu Ramen — Japanese — 41.5236,-90.5776
+La Taquería Río — Mexican — 41.5089,-90.5783
+Brickhouse Pizza — Pizza — 41.5361,-90.5671
+Green Bowl — Healthy — 41.5192,-90.5650
+Cedar BBQ — BBQ — 41.4920,-90.5630
+Tandoori Flame — Indian — 41.4900,-90.5820
+Sushi Garden — Sushi — 41.5205,-90.5710
+Pho Square — Vietnamese — 41.5315,-90.5600
+Bluebird Cafe — Brunch — 41.5200,-90.5900
+Al-Amir — Middle Eastern — 41.5005,-90.5700
+</pre>
+          </details>
+
+          <div class="stack" style="margin-top:14px">
+            <button class="btn primary" id="startBtn">Start swiping</button>
+            <button class="btn ghost" id="loadDemo">Load demo again</button>
+          </div>
+        </section>
+
+        <!-- SWIPING -->
+        <section id="swipe" class="hidden">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px">
+            <div class="progress" id="progress">1 of 10</div>
+            <div class="pill" id="rangeInfo"></div>
+          </div>
+
+          <div class="card" style="background:#0f0f12; border-radius:16px">
+            <div id="cardTitle" style="font-size:20px; font-weight:700; margin-bottom:4px">Name</div>
+            <div id="cardNote" class="muted" style="margin-bottom:6px">Note</div>
+            <div id="cardDist" class="muted" style="font-size:13px"></div>
+            <div id="cardMap" style="margin-top:8px"></div>
+          </div>
+
+          <div class="stack" style="margin-top:12px">
+            <button class="btn no" id="passBtn">Pass</button>
+            <button class="btn ok" id="likeBtn">Like</button>
+          </div>
+        </section>
+
+        <!-- RESULTS -->
+        <section id="results" class="hidden">
+          <h2 style="margin:6px 0 2px">Your likes</h2>
+          <p class="muted" id="likesCount"></p>
+          <ul id="likesList"></ul>
+          <div class="stack" style="margin-top:12px">
+            <button class="btn ghost" id="copyLikes">Copy Likes JSON</button>
+            <button class="btn primary" id="newRound">New round</button>
+          </div>
+
+          <details style="margin-top:12px">
+            <summary class="pill">(Pair) Paste partner likes to see overlaps</summary>
+            <textarea id="partnerLikes" rows="5" placeholder='["Tatsu Ramen","Green Bowl"]'></textarea>
+            <div class="stack" style="margin-top:8px">
+              <button class="btn ghost" id="calcOverlap">Calculate overlap</button>
+              <span id="overlapOut" class="muted"></span>
+            </div>
+          </details>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
