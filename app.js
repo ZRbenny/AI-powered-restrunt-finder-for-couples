@@ -146,6 +146,30 @@ const lngEl = document.getElementById('lng');
 const useLocationBtn = document.getElementById('useLocation');
 const geoStatus = document.getElementById('geoStatus');
 
+function validateNumberInput(input, min, max, errorEl) {
+  const val = Number(input.value);
+  if (!Number.isFinite(val)) {
+    errorEl.textContent = "Please enter a number.";
+    input.classList.add("error");
+    return false;
+  }
+  if (val < min || val > max) {
+    errorEl.textContent = `Must be between ${min} and ${max}.`;
+    input.classList.add("error");
+    return false;
+  }
+  errorEl.textContent = "";
+  input.classList.remove("error");
+  return true;
+}
+
+countEl.addEventListener("input", () =>
+  validateNumberInput(countEl, 5, 50, document.getElementById("countError"))
+);
+radiusEl.addEventListener("input", () =>
+  validateNumberInput(radiusEl, 1, 50, document.getElementById("radiusError"))
+);
+
 const listEditor = document.getElementById('listEditor');
 const passBtn = document.getElementById('passBtn');
 const likeBtn = document.getElementById('likeBtn');
@@ -190,6 +214,9 @@ function renderCard(){
 
 // ---- round flow ----
 function start(){
+  const isCountValid = validateNumberInput(countEl, 5, 50, document.getElementById("countError"));
+  const isRadiusValid = validateNumberInput(radiusEl, 1, 50, document.getElementById("radiusError"));
+  if (!isCountValid || !isRadiusValid) return; // stop if invalid
   const myLat = Number(latEl.value);
   const myLng = Number(lngEl.value);
   me = {

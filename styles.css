@@ -29,3 +29,13 @@ li{margin:6px 0}
 /* small helpers for map link area */
 #cardMap .pill { text-decoration: none; }
 #cardMap .pill:hover { filter: brightness(1.1); }
+.error {
+  color: #f87171;
+  font-size: 12px;
+  display: block;
+  margin-top: 4px;
+}
+
+input.error {
+  border-color: #f87171;
+}
